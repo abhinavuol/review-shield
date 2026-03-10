@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Review Detector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 160px;
+            padding: 12px;
+            font-size: 16px;
+            margin-top: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 16px;
+            padding: 12px 18px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 24px;
+            padding: 16px;
+            border-radius: 8px;
+            background: #eef6ff;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Fake Review Detector</h1>
+        <p>Paste a product review below and the model will predict whether it looks fake or genuine.</p>
+
+        <form action="/predict-form" method="post">
+            <label for="text">Review text</label>
+            <textarea id="text" name="text" required>{{ review_text }}</textarea>
+            <button type="submit">Analyze Review</button>
+        </form>
+
+        {% if prediction %}
+        <div class="result">
+            <p><span class="label">Prediction:</span> {{ prediction }}</p>
+            <p><span class="label">Fake probability:</span> {{ probability }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
