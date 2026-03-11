@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fake Review Detector</title>
+    <title>ReviewShield</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
+            max-width: 850px;
             margin: 40px auto;
             padding: 20px;
             background: #f8f9fa;
@@ -43,6 +43,8 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            background: #1f6feb;
+            color: white;
         }
 
         .result {
@@ -55,11 +57,20 @@
         .label {
             font-weight: bold;
         }
+
+        .pill {
+            display: inline-block;
+            background: #e9ecef;
+            border-radius: 999px;
+            padding: 6px 10px;
+            margin: 4px 6px 0 0;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
     <div class="card">
-        <h1>Fake Review Detector</h1>
+        <h1>ReviewShield</h1>
         <p>Paste a product review below and the model will predict whether it looks fake or genuine.</p>
 
         <form action="/predict-form" method="post">
@@ -72,6 +83,15 @@
         <div class="result">
             <p><span class="label">Prediction:</span> {{ prediction }}</p>
             <p><span class="label">Fake probability:</span> {{ probability }}</p>
+
+            {% if signals %}
+            <p><span class="label">Top suspicious signals:</span></p>
+            <div>
+                {% for signal in signals %}
+                    <span class="pill">{{ signal }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
         {% endif %}
     </div>

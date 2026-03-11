@@ -7,3 +7,4 @@ class ReviewRequest(BaseModel):
 class ReviewResponse(BaseModel):
 	label: str
 	fake_probability: float
+	suspicious_signals: list[str]

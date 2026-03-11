@@ -8,7 +8,7 @@ from app.predictor import ReviewPredictor
 from app.schemas import ReviewRequest, ReviewResponse
 
 
-app = FastAPI(title="Fake Review Detector API")
+app = FastAPI(title="ReviewShield API")
 
 templates = Jinja2Templates(
     directory=str(Path(__file__).resolve().parents[1] / "templates")
@@ -25,26 +25,32 @@ def home(request: Request):
             "request": request,
             "prediction": None,
             "probability": None,
-            "review_text": ""
+            "review_text": "",
+            "signals": []
         }
     )
 
 
 @app.post("/predict", response_model=ReviewResponse)
 def predict_api(payload: ReviewRequest):
-    label, fake_probability = predictor.predict(payload.text)
-    return ReviewResponse(label=label, fake_probability=round(fake_probability, 4))
+    label, fake_probability, suspicious_signals = predictor.predict(payload.text)
+    return ReviewResponse(
+        label=label,
+        fake_probability=round(fake_probability, 4),
+        suspicious_signals=suspicious_signals
+    )
 
 
 @app.post("/predict-form", response_class=HTMLResponse)
 def predict_form(request: Request, text: str = Form(...)):
-    label, fake_probability = predictor.predict(text)
+    label, fake_probability, suspicious_signals = predictor.predict(text)
     return templates.TemplateResponse(
         "index.html",
         {
             "request": request,
             "prediction": label,
             "probability": round(fake_probability, 4),
-            "review_text": text
+            "review_text": text,
+            "signals": suspicious_signals
         }
     )
